@@ -1,0 +1,35 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual Environments
+# =========================
+venv/
+.venv/
+graphrag_env/
+env/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+.spyproject/
+.spyderproject/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+

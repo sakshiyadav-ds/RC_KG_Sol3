@@ -1,0 +1,24 @@
+# ── Streamlit UI ──────────────────────────────────────────────────────────
+streamlit>=1.38.0
+streamlit-agraph>=0.0.45
+
+# ── Neo4j driver ──────────────────────────────────────────────────────────
+neo4j>=5.24.0
+
+# ── LLM — Groq ───────────────────────────────────────────────────────────
+groq>=0.13.0
+
+# ── PDF parsing ───────────────────────────────────────────────────────────
+PyPDF2>=3.0.0
+
+# ── Embedding backends (install all; only the chosen one is loaded) ───────
+# OpenAI (text-embedding-3-small, 1536d) — needs OPENAI_API_KEY
+openai>=1.35.0
+
+# Local sentence-transformers (all-mpnet-base-v2 768d OR all-MiniLM-L6-v2 384d)
+sentence-transformers>=3.0.0
+numpy>=1.26.0
+
+# ── Optional ─────────────────────────────────────────────────────────────
+# torch is a transitive dep of sentence-transformers; CPU build is fine:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
