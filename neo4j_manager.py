@@ -105,7 +105,7 @@ class Neo4jManager:
                        description: str, embedding: list, source_doc: str = "") -> bool:
         with self.driver.session() as s:
             s.run("""
-                MERGE (e:Entity {id: $id})
+                MERGE (e {id: $id})
                 ON CREATE SET
                     e.label       = $label,
                     e.type        = $etype,
@@ -129,7 +129,7 @@ class Neo4jManager:
             s.run("MERGE (a:Entity {id:$id}) ON CREATE SET a.label=$id, a.type='Other'", id=source_id)
             s.run("MERGE (b:Entity {id:$id}) ON CREATE SET b.label=$id, b.type='Other'", id=target_id)
             s.run(f"""
-                MATCH (a:Entity {{id:$sid}}), (b:Entity {{id:$tid}})
+                MATCH (a {{id:$sid}}), (b {{id:$tid}})
                 MERGE (a)-[r:{rel_type}]->(b)
                 ON CREATE SET r.description=$desc, r.relation_name=$rel
             """, sid=source_id, tid=target_id, desc=description, rel=relation)
@@ -185,8 +185,8 @@ class Neo4jManager:
     def expand_subgraph(self, seed_ids: list, hops: int = 2, limit: int = 60) -> dict:
         print(f"[Neo4jManager] Graph traversal: {hops}-hop from {len(seed_ids)} seeds...")
         cypher = f"""
-            MATCH (seed:Entity) WHERE seed.id IN $seed_ids
-            MATCH path = (seed)-[*0..{hops}]-(connected:Entity)
+            MATCH (seed) WHERE seed.id IN $seed_ids
+            MATCH path = (seed)-[*0..{hops}]-(connected)
             WITH collect(DISTINCT connected) AS nodes_list
             UNWIND nodes_list AS n
             WITH collect(DISTINCT n) AS all_nodes
@@ -227,7 +227,7 @@ class Neo4jManager:
     def get_entity_neighbors_cypher(self, entity_id: str, hops: int = 1) -> list:
         with self.driver.session() as s:
             return s.run("""
-                MATCH (e:Entity {id:$id})-[r]-(n:Entity)
+                MATCH (e {id:$id})-[r]-(n)
                 RETURN type(r) AS relation, n.label AS neighbor_label,
                        n.type AS neighbor_type, n.id AS neighbor_id
                 LIMIT 25
