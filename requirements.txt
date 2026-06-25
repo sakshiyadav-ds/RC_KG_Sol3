@@ -18,7 +18,7 @@ openai>=1.35.0
 # Local sentence-transformers (all-mpnet-base-v2 768d OR all-MiniLM-L6-v2 384d)
 sentence-transformers>=3.0.0
 numpy>=1.26.0
-
+torchvision
 # ── Optional ─────────────────────────────────────────────────────────────
 # torch is a transitive dep of sentence-transformers; CPU build is fine:
 #   pip install torch --index-url https://download.pytorch.org/whl/cpu
