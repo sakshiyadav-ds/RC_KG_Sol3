@@ -258,7 +258,7 @@ class Neo4jManager:
             node_list = s.run(f"""
                 MATCH (e)
                 RETURN
-                    coalesce(e.id, elementId(e)) AS id,
+                    head(labels(e)) + ":" + coalesce(e.id, elementId(e)) AS id,
                     coalesce(e.label, head(labels(e)), 'Unknown') AS label,
                     coalesce(e.type, head(labels(e)), 'Unknown') AS type,
                     coalesce(e.description, '') AS description
@@ -267,10 +267,12 @@ class Neo4jManager:
             node_ids  = [n["id"] for n in node_list]
             edge_list = s.run("""
                 MATCH (a)-[r]->(b)
-                WHERE a.id IN $ids AND b.id IN $ids
-                RETURN a.id AS source, b.id AS target, type(r) AS relation
-                LIMIT 600
-            """, ids=node_ids).data()
+                RETURN
+                    head(labels(a)) + ":" + coalesce(a.id, elementId(a)) AS source,
+                    head(labels(b)) + ":" + coalesce(b.id, elementId(b)) AS target,
+                    type(r) AS relation
+                LIMIT 1000
+                """).data()
         return {"nodes": node_list, "edges": edge_list}
 
     def list_all_entities_brief(self, limit: int = 500) -> list:
