@@ -199,12 +199,9 @@ with st.sidebar:
                 log(f"[app] Connecting — backend={chosen_backend} dim={dim_map[chosen_backend]}...")
                 with st.spinner("Initialising embedding model and connecting to Neo4j..."):
                     # Wire embedding backend BEFORE importing neo4j_manager
-                    import importlib
                     import embeddings as emb_mod
                     emb_mod.set_backend(chosen_backend, openai_api_key=openai_key)
                     # Force neo4j_manager to re-read the updated EMBEDDING_DIM
-                    import neo4j_manager as njm
-                    importlib.reload(njm)
                     # Now build pipeline
                     from graphrag_pipeline import GraphRAGPipeline
                     pipeline = GraphRAGPipeline(neo4j_uri, neo4j_user, neo4j_pass, groq_key)

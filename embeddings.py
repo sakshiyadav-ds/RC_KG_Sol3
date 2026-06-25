@@ -82,15 +82,16 @@ def get_embedding_dim() -> int:
 EMBEDDING_DIM = BACKENDS[_backend_name]["dim"]
 
 
+import streamlit as st
+
+@st.cache_resource
+def load_model(model_name):
+    from sentence_transformers import SentenceTransformer
+    return SentenceTransformer(model_name)
+
 def _get_st_model():
-    global _st_model
-    if _st_model is None:
-        from sentence_transformers import SentenceTransformer
-        model_name = BACKENDS[_backend_name]["model"]
-        print(f"[embeddings] Loading sentence-transformers model '{model_name}'...")
-        _st_model = SentenceTransformer(model_name)
-        print(f"[embeddings] ✓ Model loaded. dim={BACKENDS[_backend_name]['dim']}")
-    return _st_model
+    model_name = BACKENDS[_backend_name]["model"]
+    return load_model(model_name)
 
 
 def _get_openai_client():
